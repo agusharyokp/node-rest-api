@@ -41,26 +41,30 @@ The server will start in development mode with nodemon.
 {
   "bcryptjs": "^3.0.2",
   "body-parser": "^2.2.0",
+  "cors": "^2.8.5",
   "dotenv": "^16.5.0",
   "express": "^5.1.0",
   "express-validator": "^7.2.1",
   "jsonwebtoken": "^9.0.2",
   "mongoose": "^8.14.3",
-  "multer": "^1.4.5-lts.2"
+  "multer": "^1.4.5-lts.2",
+  "socket.io": "^4.7.4"
 }
 ```
 
-## REST API Endpoints
+## API Endpoints
 
-### Authentication
+### REST API Endpoints
 - `POST /api/auth/register` - Register a new user
 - `POST /api/auth/login` - Login user and get JWT token
 - `GET /api/auth/status` - Get user status (requires authentication)
 - `PUT /api/auth/status` - Update user status (requires authentication)
-
-### Posts
 - `GET /api/posts` - Get all posts (requires authentication)
 - `POST /api/post` - Create a new post (requires authentication)
+
+### WebSocket Events
+- `connection` - Client connects to WebSocket server
+- Real-time updates for posts and user status (handled internally)
 
 ### Error Codes
 - 200: Success
@@ -75,6 +79,7 @@ The server will start in development mode with nodemon.
 - Password hashing with bcrypt
 - Input validation with express-validator
 - Environment variables for sensitive data
+- WebSocket CORS configuration for secure cross-origin connections
 
 ## Development
 
