@@ -13,6 +13,7 @@ A RESTful API built with Node.js, Express, and MongoDB for user authentication a
 - Node.js (Latest LTS version)
 - MongoDB (Local or MongoDB Atlas)
 - npm or yarn
+- socket.io-client (for WebSocket functionality)
 
 ## Setup Instructions
 
@@ -63,8 +64,86 @@ The server will start in development mode with nodemon.
 - `POST /api/post` - Create a new post (requires authentication)
 
 ### WebSocket Events
+
+#### Available Events
 - `connection` - Client connects to WebSocket server
-- Real-time updates for posts and user status (handled internally)
+- `posts` - Real-time post updates
+- `disconnect` - Client disconnects from server
+
+#### Post Update Events
+The `posts` event can have the following actions:
+- `create` - New post created
+- `update` - Post updated
+- `delete` - Post deleted
+
+Example event payload:
+```javascript
+{
+    action: 'create', // or 'update' or 'delete'
+    post: {
+        _id: 'post-id',
+        title: 'Post Title',
+        content: 'Post Content',
+        imageUrl: 'path/to/image',
+        creator: {
+            _id: 'user-id',
+            name: 'User Name'
+        }
+    }
+}
+```
+
+#### Client-Side Implementation
+To use WebSocket functionality in your client application:
+
+1. Install socket.io-client:
+```bash
+npm install socket.io-client
+```
+
+2. Initialize WebSocket connection:
+```javascript
+// Import socket.io-client
+import io from 'socket.io-client';
+
+// Connect to the server
+const socket = io('http://localhost:8080');
+
+// Handle connection
+socket.on('connect', () => {
+    console.log('Connected to WebSocket server');
+});
+
+// Listen for post updates
+socket.on('posts', (data) => {
+    switch (data.action) {
+        case 'create':
+            console.log('New post created:', data.post);
+            // Update your UI with the new post
+            break;
+        case 'update':
+            console.log('Post updated:', data.post);
+            // Update your UI with the modified post
+            break;
+        case 'delete':
+            console.log('Post deleted:', data.post);
+            // Remove the post from your UI
+            break;
+    }
+});
+
+#### Best Practices
+- Always handle connection errors and reconnection logic
+- Implement proper authentication for WebSocket connections
+- Use rooms to organize different types of real-time communication
+- Handle message history and persistence as needed
+- Implement proper error handling for WebSocket events
+
+#### Security Notes
+- WebSocket connections are secured using CORS configuration
+- Ensure proper authentication before joining rooms
+- Implement rate limiting for WebSocket events
+- Use secure WebSocket (wss) in production environments
 
 ### Error Codes
 - 200: Success
