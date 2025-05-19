@@ -132,14 +132,14 @@ socket.on('posts', (data) => {
     }
 });
 
-#### Best Practices
+## Best Practices
 - Always handle connection errors and reconnection logic
 - Implement proper authentication for WebSocket connections
 - Use rooms to organize different types of real-time communication
 - Handle message history and persistence as needed
 - Implement proper error handling for WebSocket events
 
-#### Security Notes
+## Security Notes
 - WebSocket connections are secured using CORS configuration
 - Ensure proper authentication before joining rooms
 - Implement rate limiting for WebSocket events
