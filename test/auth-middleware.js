@@ -40,7 +40,7 @@ describe('Auth Middleware', function() {
         jwt.verify.restore();
     });
 
-    it('should throw an error if the token connet be verified', function() {
+    it('should throw an error if the token cannot be verified', function() {
         const req = {
             get: function() {
                 return 'Bearer: fake-token';

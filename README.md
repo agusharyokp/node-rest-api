@@ -1,13 +1,16 @@
 # Node.js REST API Project
 
-A RESTful API built with Node.js, Express, and MongoDB for user authentication and post management.
+A comprehensive RESTful API built with Node.js, Express, and MongoDB for social media-like functionality including user authentication, posts management, and real-time updates.
 
 ## Features
 - User Authentication (Login/Register)
-- JWT-based Authentication
-- User Status Management
-- Post Creation and Retrieval
-- File Upload Support
+- JWT-based Authentication and Authorization
+- User Profile Management
+- Post Creation, Retrieval, and Management
+- Real-time Updates via WebSocket
+- File Upload Support for Post Images
+- Input Validation and Error Handling
+- Environment-based Configuration
 
 ## Prerequisites
 - Node.js (Latest LTS version)
@@ -22,6 +25,8 @@ A RESTful API built with Node.js, Express, and MongoDB for user authentication a
 ```env
 MONGODB_URI=mongodb+srv://your-username:your-password@your-cluster.mongodb.net/your-database
 JWT_SECRET=your-secret-key
+PORT=3000
+NODE_ENV=development
 ```
 
 3. Install dependencies:
@@ -31,25 +36,47 @@ npm install
 
 4. Start the server:
 ```bash
+# Development mode (with nodemon)
 npm start
+
+# Production mode
+npm run start:prod
 ```
 
-The server will start in development mode with nodemon.
+## Project Structure
+```
+node-rest-api/
+├── controllers/     # API controllers
+├── middleware/      # Custom middleware
+├── models/          # MongoDB models
+├── routes/          # API routes
+├── test/            # Test files
+├── app.js           # Main application file
+├── socket.js        # WebSocket configuration
+└── .env             # Environment variables
+```
 
 ## Dependencies
 
 ```json
 {
-  "bcryptjs": "^3.0.2",
-  "body-parser": "^2.2.0",
-  "cors": "^2.8.5",
-  "dotenv": "^16.5.0",
-  "express": "^5.1.0",
-  "express-validator": "^7.2.1",
-  "jsonwebtoken": "^9.0.2",
-  "mongoose": "^8.14.3",
-  "multer": "^1.4.5-lts.2",
-  "socket.io": "^4.7.4"
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.3",
+    "multer": "^1.4.5-lts.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "chai": "^4.5.0",
+    "mocha": "^11.4.0",
+    "nodemon": "^3.1.10",
+    "sinon": "^20.0.0"
+  }
 }
 ```
 

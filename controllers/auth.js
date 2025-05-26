@@ -45,7 +45,6 @@ exports.signup = (req, res) => {
 exports.login = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    let loadedUser;
     try {
       const user = await User.findOne({ email: email });
       if (!user) {
@@ -53,7 +52,6 @@ exports.login = async (req, res, next) => {
         error.statusCode = 401;
         throw error;
       }
-      loadedUser = user;
       const isEqual = await bcrypt.compare(password, user.password);
       if (!isEqual) {
         const error = new Error('Wrong password!');
@@ -62,39 +60,36 @@ exports.login = async (req, res, next) => {
       }
       const token = jwt.sign(
         {
-          email: loadedUser.email,
-          userId: loadedUser._id.toString()
+          email: user.email,
+          userId: user._id.toString()
         },
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
       );
-      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
-      return;
+      res.status(200).json({ token: token, userId: user._id.toString() });
     } catch (err) {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
-      return err;
     }
 };
 
-exports.getStatus = (req, res, next) => {
-    User.findById(req.userId)
-        .then(user => {
-            if (!user) {
-                const error = new Error("User not found.");
-                error.statusCode = 404;
-                throw error;
-            }
-            res.status(200).json({ status: user.status });
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
-        });
+exports.getStatus = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            const error = new Error("User not found.");
+            error.statusCode = 404;
+            throw error;
+        }
+        res.status(200).json({ status: user.status });
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
 };
 
 exports.updateStatus = (req, res, next) => {
